@@ -1,0 +1,17 @@
+{
+  "name": "espanso-builder-api",
+  "version": "0.1.0",
+  "description": "API backend for espanso builder application",
+  "license": "MIT",
+  "author": "Ken N",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongoose": "^8.17.2"
+  }
+}
