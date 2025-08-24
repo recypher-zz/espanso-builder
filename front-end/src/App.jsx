@@ -10,17 +10,14 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 function App() {
   const [text, setText] = useState("");
-  const [multiline, setMultiline] = useState(false); // Changed to boolean
+  const [multiline, setMultiline] = useState(false);
   const [replaceText, setReplaceText] = useState("");
   const [triggers, setTriggers] = useState([]);
-  // const [showBox, setShowBox] = useState(false);
 
   useEffect(() => {
     const fetchTriggers = async () => {
       const res = await axios.get(`${API_URL}/data`);
-      console.log(res.data);
       setTriggers(res.data);
-      console.log(setTriggers)
     };
     fetchTriggers();
   }, []);
@@ -61,21 +58,28 @@ function App() {
           multiline={multiline}
           setMultiline={setMultiline}
         />
-        {/* {showBox && <FormBuilder />} */}
+
         <Output triggerText={text} multiline={multiline} replaceText={replaceText}></Output>
+
         <button onClick={handlePostData} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Send Data to API
         </button>
         <button onClick={handleGetData} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Retrieve Data from API
         </button>
+
+
           {triggers.map(trigger => (
             <TriggerCard
               key={trigger._id}
               triggerText={trigger.trigger}
+              replaceText={trigger.replaceText}
+              setText={setText}
+              setReplaceText={setReplaceText}
             >
             </TriggerCard>
           ))}
+
       </div>
     </div>
   )
