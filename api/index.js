@@ -38,7 +38,7 @@ app.post('/data', async (req, res) => {
         console.error("Error saving trigger:", error);
         res.status(500).json({error: "Failed to save trigger"})
     }
-})
+});
 
 app.get('/data', async (req, res) => {
     try {
@@ -51,4 +51,4 @@ app.get('/data', async (req, res) => {
 
 app.listen(8080, () => {
     console.log('Server listening on port 8080');
-})
+});

@@ -61,25 +61,28 @@ function App() {
 
         <Output triggerText={text} multiline={multiline} replaceText={replaceText}></Output>
 
-        <button onClick={handlePostData} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Send Data to API
-        </button>
-        <button onClick={handleGetData} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Retrieve Data from API
-        </button>
-
-
-          {triggers.map(trigger => (
-            <TriggerCard
-              key={trigger._id}
-              triggerText={trigger.trigger}
-              replaceText={trigger.replaceText}
-              setText={setText}
-              setReplaceText={setReplaceText}
-            >
-            </TriggerCard>
-          ))}
-
+        <div className="m-3 flex flex-col items-center">
+          <div className="flex gap-4 mb-6">
+            <button onClick={handlePostData} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Send Data to API
+            </button>
+            <button onClick={handleGetData} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Retrieve Data from API
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {triggers.map(trigger => (
+              <TriggerCard
+                key={trigger._id}
+                triggerText={trigger.trigger}
+                replaceText={trigger.replaceText}
+                setText={setText}
+                setReplaceText={setReplaceText}
+              >
+              </TriggerCard>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
