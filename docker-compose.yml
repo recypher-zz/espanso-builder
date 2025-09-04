@@ -17,6 +17,7 @@ services:
       - EMAIL_HOST=${EMAIL_HOST}
       - EMAIL_PORT=${EMAIL_PORT}
       - APPROVAL_EMAIL=${APPROVAL_EMAIL}
+      - VITE_API_URL=${VITE_API_URL}
     restart: always
 
   frontend:
