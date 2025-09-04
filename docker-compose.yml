@@ -12,6 +12,11 @@ services:
       - MONGO_PASS=${MONGO_PASSWORD}
       - MONGO_DB=${MONGO_DB}
       - MONGO_HOST=db
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - APPROVAL_EMAIL=${APPROVAL_EMAIL}
     restart: always
 
   frontend:

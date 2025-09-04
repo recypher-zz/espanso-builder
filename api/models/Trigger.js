@@ -14,6 +14,11 @@ const triggerSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
+    },
+    approved: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 }, {
     timestamps: true
