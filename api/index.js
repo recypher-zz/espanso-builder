@@ -52,6 +52,8 @@ app.get('/data', async (req, res) => {
 
 app.get('/triggers/approval/:id', async (req, res) => {
     try {
+
+        console.log("Attempting to find this fuckin thing...");
         const { id } = req.params; // extract /:id
     
         const foundTrigger = await Trigger.findById(id);
@@ -65,6 +67,28 @@ app.get('/triggers/approval/:id', async (req, res) => {
         console.log(res.json(foundTrigger));
     } catch (err) {
         console.error("Error finding trigger:", err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.patch('/triggers/approval/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { approved } = req.body;
+
+        const updatedTrigger = await Trigger.findByIdAndUpdate(
+            id,
+            { approved },
+            { new: true }
+        );
+
+        if (!updatedTrigger) {
+            return res.status(404).json({ error: "Trigger not found" });
+        }
+
+        res.json(updatedTrigger);
+    } catch (err) {
+        console.error("Error updating trigger:", err);
         res.status(500).json({ error: "Server error" });
     }
 });
