@@ -34,6 +34,8 @@ app.post('/triggers/approval', async (req, res) => {
         console.log(prepareEmail(savedTrigger.trigger, savedTrigger.replaceText, savedTrigger.id));
 
         sendApprovalEmail("Test", prepareEmail(savedTrigger.trigger, savedTrigger.replaceText, savedTrigger.id));
+        
+        return res.status(200).json({success: "Trigger sent for approval"});
 
 
     } catch (err) {
@@ -41,7 +43,7 @@ app.post('/triggers/approval', async (req, res) => {
     }
 });
 
-app.get('/data', async (req, res) => {
+app.get('/triggers/all', async (req, res) => {
     try {
         const triggers = await Trigger.find();
         res.json(triggers);
@@ -52,21 +54,17 @@ app.get('/data', async (req, res) => {
 
 app.get('/triggers/approval/:id', async (req, res) => {
     try {
-
-        console.log("Attempting to find this fuckin thing...");
         const { id } = req.params; // extract /:id
-    
         const foundTrigger = await Trigger.findById(id);
-
         console.log(foundTrigger);
 
         if (!foundTrigger) {
             return res.status(404).json({ error: "Trigger not found" });
         }
 
-        console.log(res.json(foundTrigger));
+        return res.status(200).json(foundTrigger);
+
     } catch (err) {
-        console.error("Error finding trigger:", err);
         res.status(500).json({ error: "Server error" });
     }
 });
