@@ -17,7 +17,7 @@ function HomePage() {
 
   useEffect(() => {
     const fetchTriggers = async () => {
-      const res = await axios.get(`${API_URL}/data`);
+      const res = await axios.get(`${API_URL}/triggers/all`);
       setTriggers(res.data);
     };
     fetchTriggers();
