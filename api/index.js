@@ -52,6 +52,19 @@ app.get('/triggers/all', async (req, res) => {
     }
 });
 
+app.get('/triggers/most-recent', async (req, res) => {
+    try {
+        const recentTriggers = await Trigger.find()
+            .sort({ createdAt: -1}) // newest first
+            .limit(6);
+
+            res.json(recentTriggers);
+    } catch (err) {
+        console.error("Error fetching most recent triggers:", err);
+        res.status(500).json({ error: "Failed to fetch most recent triggers" });
+    }
+});
+
 app.get('/triggers/approval/:id', async (req, res) => {
     try {
         const { id } = req.params; // extract /:id
