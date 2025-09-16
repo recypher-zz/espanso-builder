@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import Builder from '../components/Builder';
-import Output from '../components/Output';
-import TriggerCard from '../components/TriggerCard'
-import TriggerModal from '../components/TriggerModal';
-import Header from '../components/Header';
-import axios from 'axios'
+import { useState, useEffect } from "react";
+import Builder from "../components/Builder";
+import Output from "../components/Output";
+import TriggerCard from "../components/TriggerCard";
+import TriggerModal from "../components/TriggerModal";
+import Header from "../components/Header";
+import axios from "axios";
 import { toast } from "react-toastify";
-
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -30,17 +29,18 @@ function HomePage() {
     const dataToSend = {
       triggerText: text,
       multiline: multiline,
-      replaceText: replaceText
+      replaceText: replaceText,
     };
 
-    axios.post(`${API_URL}/triggers/approval`, dataToSend)
-      .then(response => {
-        toast.success("✅ Trigger sent for approval!")
+    axios
+      .post(`${API_URL}/triggers/approval`, dataToSend)
+      .then(() => {
+        toast.success("✅ Trigger sent for approval!");
       })
-      .catch(error => {
-        toast.error("❌ Trigger failed to be sent.")
+      .catch(() => {
+        toast.error("❌ Trigger failed to be sent.");
       });
-  }
+  };
 
   const openModal = (trigger) => {
     setSelectedTrigger(trigger);
@@ -54,59 +54,71 @@ function HomePage() {
 
   return (
     <>
-      <Header/>
-      <div className="h-screen w-screen bg-slate-700">
-        <div className="App">
-          <Builder 
-            text={text} 
-            setText={setText} 
-            replaceText={replaceText} 
-            setReplaceText={setReplaceText} 
-            multiline={multiline}
-            setMultiline={setMultiline}
-          />
+      <Header />
+      <div className="min-h-screen w-full bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 text-white">
+        <div className="App max-w-6xl mx-auto px-6 py-12">
+          {/* Builder & Output Section */}
+          <div className="bg-white/20 backdrop-blur-md rounded-2xl shadow-lg p-8 mb-12">
+            <Builder
+              text={text}
+              setText={setText}
+              replaceText={replaceText}
+              setReplaceText={setReplaceText}
+              multiline={multiline}
+              setMultiline={setMultiline}
+            />
 
-          <Output triggerText={text} multiline={multiline} replaceText={replaceText}></Output>
+            <div className="mt-8">
+              <Output
+                triggerText={text}
+                multiline={multiline}
+                replaceText={replaceText}
+              />
+            </div>
 
-          <div className="m-3 flex flex-col items-center">
-            <div className="flex gap-4 mb-6">
-              <button onClick={handlePostData} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Send for Approval
+            <div className="flex justify-center mt-10">
+              <button
+                onClick={handlePostData}
+                className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md transition-transform hover:scale-105"
+              >
+                Send for Approval
               </button>
             </div>
-            <div className="mt-20 flex flex-col items-center">
-              <h1 className="text-3xl font-extrabold text-white">Most Recently Added Triggers</h1>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-16">
-              {triggers
-                .filter(trigger => trigger.approved)
-                .map(trigger => (
-                  <TriggerCard
-                    key={trigger._id}
-                    triggerText={trigger.trigger}
-                    replaceText={trigger.replaceText}
-                    onOpenModal={() => openModal(trigger)}
-                  >
-                  </TriggerCard>
-                ))}
-            </div>
+          </div>
+
+          {/* Triggers Section */}
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-extrabold tracking-wide drop-shadow-sm">
+              Most Recently Added Triggers
+            </h1>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {triggers
+              .filter((trigger) => trigger.approved)
+              .map((trigger) => (
+                <TriggerCard
+                  key={trigger._id}
+                  triggerText={trigger.trigger}
+                  replaceText={trigger.replaceText}
+                  onOpenModal={() => openModal(trigger)}
+                />
+              ))}
           </div>
         </div>
       </div>
-      <TriggerModal
-            isOpen={modalIsOpen}
-            onClose={closeModal}
-            title="Trigger Output"
-          >
-          {selectedTrigger && (
-              <Output
-                  triggerText={selectedTrigger.trigger}
-                  replaceText={selectedTrigger.replaceText}
-                />
-          )}
+
+      {/* Modal */}
+      <TriggerModal isOpen={modalIsOpen} onClose={closeModal} title="Trigger Output">
+        {selectedTrigger && (
+          <Output
+            triggerText={selectedTrigger.trigger}
+            replaceText={selectedTrigger.replaceText}
+          />
+        )}
       </TriggerModal>
     </>
-  )
+  );
 }
 
 export default HomePage;

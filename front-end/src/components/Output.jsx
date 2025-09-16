@@ -1,4 +1,4 @@
-import { CodeBlock, dracula } from 'react-code-blocks';
+import { CopyBlock, dracula } from 'react-code-blocks';
 
 function Output({triggerText, replaceText,  multiline  }) {
     const outputCode = `- trigger: "${triggerText}"\n   replace: ${multiline ? "|\n" + formatReplaceText(replaceText, true) : replaceText}`;
@@ -7,11 +7,13 @@ function Output({triggerText, replaceText,  multiline  }) {
     return (
     <>
         <div className="output m-8">
-            <CodeBlock
+            <CopyBlock
                 text={outputCode}
                 language='yaml'
+                wrapLines={true}
                 showLineNumbers={true}
                 theme={dracula}
+                codeBlock
             />
         </div>
     </>
