@@ -9,17 +9,10 @@ function TriggerCard({ triggerText, replaceText, onOpenModal }) {
                     e.preventDefault();
                     onOpenModal();
                 }}
-                className="
-                    block max-w-sm p-6
-                    bg-white/30 backdrop-blur-md
-                    border border-white/20
-                    rounded-2xl shadow-lg
-                    hover:bg-white/40 hover:shadow-xl
-                    transition-all duration-300 ease-in-out
-                    "
+                className="block p-6 bg-white/20 backdrop-blur-md rounded-2xl shadow-lg hover:bg-white/30 transition"
                 >
 
-                <h5 className="mb-2 text-xl font-semibold tracking-tight text-gray-900 text-center drop-shadow-sm">
+                <h5 className="text-white font-semibold text-center">
                     {triggerText}
                 </h5>
             </a>

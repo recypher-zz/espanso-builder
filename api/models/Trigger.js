@@ -19,6 +19,10 @@ const triggerSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    likes: {
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true

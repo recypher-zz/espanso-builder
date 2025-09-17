@@ -15,12 +15,17 @@ function AllTriggers () {
     const [selectedTrigger, setSelectedTrigger] = useState(null);
 
     useEffect(() => {
-        const fetchTriggers = async () => {
-            const res = await axios.get(`${API_URL}/triggers/all`);
-            setTriggers(res.data)
-        };
-        fetchTriggers();
+        const controller = new AbortController();
+
+        axios.get(`${API_URL}/triggers/all`, { signal: controller.signal })
+            .then(res => setTriggers(res.data))
+            .catch(err => {
+            if (err.name !== "CanceledError") console.error(err);
+            });
+
+        return () => controller.abort();
     }, []);
+
 
     const openModal = (trigger) => {
         setSelectedTrigger(trigger);

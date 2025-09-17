@@ -18,11 +18,23 @@ function HomePage() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    const fetchTriggers = async () => {
-      const res = await axios.get(`${API_URL}/triggers/most-recent`);
-      setTriggers(res.data);
+  const controller = new AbortController();
+
+  const fetchTriggers = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/triggers/most-recent`, {
+          signal: controller.signal,
+        });
+        setTriggers(res.data);
+      } catch (err) {
+        if (err.name !== "CanceledError") {
+          console.error(err);
+        }
+      }
     };
+
     fetchTriggers();
+    return () => controller.abort();
   }, []);
 
   const handlePostData = () => {
@@ -55,8 +67,8 @@ function HomePage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen w-full bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 text-white">
-        <div className="App max-w-6xl mx-auto px-6 py-12">
+      <div className="min-h-screen w-full bg-gradient-to-br from-slate-800 to-slate-700 flex flex-col items-center p-4">
+        <div className="App w-full mx-auto px-6 py-12">
           {/* Builder & Output Section */}
           <div className="bg-white/20 backdrop-blur-md rounded-2xl shadow-lg p-8 mb-12">
             <Builder
@@ -87,13 +99,13 @@ function HomePage() {
           </div>
 
           {/* Triggers Section */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-10 mt-10">
             <h1 className="text-3xl font-extrabold tracking-wide drop-shadow-sm">
               Most Recently Added Triggers
             </h1>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-12">
             {triggers
               .filter((trigger) => trigger.approved)
               .map((trigger) => (

@@ -7,55 +7,74 @@ import { toast } from "react-toastify";
 const api_url = import.meta.env.VITE_API_URL;
 
 function ApprovalPage() {
-    const { id } = useParams();
-    const [trigger, setTrigger] = useState(null)
-    
-    useEffect(() => {
-        axios
-            .get(`${api_url}/triggers/approval/${id}`)
-            .then((res) => setTrigger(res.data))
-            .catch((err) => {
-                console.error(err);
-                toast.error("Failed to load trigger");
-        });
-    }, [id]);
+  const { id } = useParams();
+  const [trigger, setTrigger] = useState(null);
 
-    const handleApproval = async (value) => {
-        try {
-            const { data } = await axios.patch(
-                `${api_url}/triggers/approval/${trigger._id}`,
-                { approved: value }
-            );
-            
-            setTrigger(data);
+  useEffect(() => {
+    axios
+      .get(`${api_url}/triggers/approval/${id}`)
+      .then((res) => setTrigger(res.data))
+      .catch((err) => {
+        console.error(err);
+        toast.error("Failed to load trigger");
+      });
+  }, [id]);
 
-            if (value) {
-                toast.success("✅ Trigger approved!");
-            } else {
-                toast.error("❌ Trigger declined.")
-            }
+  const handleApproval = async (value) => {
+    try {
+      const { data } = await axios.patch(
+        `${api_url}/triggers/approval/${trigger._id}`,
+        { approved: value }
+      );
 
-        } catch (err) {
-            toast.error("⚠️ Failed to update trigger");
-        }
-    };
+      setTrigger(data);
 
-    if (!trigger) return <p>Loading...</p>;
+      if (value) {
+        toast.success("✅ Trigger approved!");
+      } else {
+        toast.error("❌ Trigger declined.");
+      }
+    } catch (err) {
+      toast.error("⚠️ Failed to update trigger");
+    }
+  };
 
-    return (
-        <div className="h-screen w-screen bg-slate-700">
-            <div className="m-3 flex flex-col items-center">
-                <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight">Trigger Review</h1>
-                <Output
-                    triggerText={trigger.trigger}
-                    replaceText={trigger.replaceText}
-                    multiline={trigger.isMultiline}
-                />
-                <button onClick={() => handleApproval(true)} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Approve</button>
-                <button onClick={() => handleApproval(false)} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Decline</button>
-            </div>
+  if (!trigger) return <p className="text-white text-center mt-10">Loading...</p>;
+
+  return (
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-800 to-slate-700 flex items-center justify-center p-4">
+      <div className="bg-white/20 backdrop-blur-md rounded-2xl shadow-lg p-8 w-full max-w-xl flex flex-col items-center space-y-6">
+        <h1 className="text-3xl font-extrabold text-white text-center">
+          Trigger Review
+        </h1>
+
+        {/* Output interface */}
+        <div className="w-full">
+          <Output
+            triggerText={trigger.trigger}
+            replaceText={trigger.replaceText}
+            multiline={trigger.isMultiline}
+          />
         </div>
-    );
+
+        {/* Approval buttons */}
+        <div className="flex gap-6">
+          <button
+            onClick={() => handleApproval(true)}
+            className="bg-green-600 hover:bg-green-700 text-white rounded-xl py-2 px-6"
+          >
+            Approve
+          </button>
+          <button
+            onClick={() => handleApproval(false)}
+            className="bg-red-600 hover:bg-red-700 text-white rounded-xl py-2 px-6"
+          >
+            Decline
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ApprovalPage;
