@@ -1,0 +1,28 @@
+# Local Development
+localhost {
+    handle_path /api* {
+        reverse_proxy api-services:8080
+    }
+
+    handle {
+        reverse_proxy frontend-service:80
+    }
+
+    file_server
+}
+
+# Production
+${DOMAIN} {
+    handle_path /api* {
+        reverse_proxy api-services:8080
+    }
+
+    handle {
+        reverse_proxy frontend-service:80
+    }
+
+    file_server
+
+    # Automatic HTTPS
+    tls ${EMAIL_USER}
+}
