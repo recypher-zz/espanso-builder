@@ -1,9 +1,79 @@
+# services:
+#   api:
+#     build:
+#       context: ./api
+#       dockerfile: Dockerfile
+#     container_name: api-service
+#     expose:
+#       - "8080"
+#     environment:
+#       - NODE_ENV=production
+#       - MONGO_USER=${MONGO_USER}
+#       - MONGO_PASS=${MONGO_PASSWORD}
+#       - MONGO_DB=${MONGO_DB}
+#       - MONGO_HOST=db
+#       - EMAIL_USER=${EMAIL_USER}
+#       - EMAIL_PASS=${EMAIL_PASS}
+#       - EMAIL_HOST=${EMAIL_HOST}
+#       - EMAIL_PORT=${EMAIL_PORT}
+#       - APPROVAL_EMAIL=${APPROVAL_EMAIL}
+#       - VITE_API_URL=${VITE_API_URL}
+#       - VITE_APP_URL=${VITE_APP_URL}
+#     restart: always
+
+#   frontend:
+#     build:
+#       context: ./front-end
+#       dockerfile: Dockerfile
+#     container_name: frontend-service
+#     expose:
+#       - "80"
+#     restart: always
+#     depends_on:
+#       - api
+
+#   db:
+#     image: mongo:7
+#     container_name: mongo-db
+#     restart: always
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+#       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+#       MONGO_INITDB_DATABASE: ${MONGO_DB}
+#     volumes:
+#       - mongo_data:/data/db
+
+#   caddy:
+#     image: caddy:latest
+#     container_name: caddy-proxy
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#     environment:
+#       - EMAIL_USER=${EMAIL_USER}
+#       - DOMAIN=${DOMAIN}
+#     volumes:
+#       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+#       - caddy_data:/data
+#       - caddy_config:/config
+#     depends_on:
+#       - frontend
+#       - api
+
+# volumes:
+#   mongo_data:
+#   caddy_data:
+#   caddy_config:
+
+
+version: '3.8'
+
 services:
   api:
     build:
       context: ./api
       dockerfile: Dockerfile
-    container_name: api-service
+    container_name: api-services
     expose:
       - "8080"
     environment:
@@ -25,6 +95,8 @@ services:
     build:
       context: ./front-end
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL}
     container_name: frontend-service
     expose:
       - "80"
@@ -32,9 +104,23 @@ services:
     depends_on:
       - api
 
+  caddy:
+    image: caddy:latest
+    container_name: caddy-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - api
+
   db:
     image: mongo:7
-    container_name: mongo-db
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
@@ -42,23 +128,6 @@ services:
       MONGO_INITDB_DATABASE: ${MONGO_DB}
     volumes:
       - mongo_data:/data/db
-
-  caddy:
-    image: caddy:latest
-    container_name: caddy-proxy
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - EMAIL_USER=${EMAIL_USER}
-      - DOMAIN=${DOMAIN}
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - frontend
-      - api
 
 volumes:
   mongo_data:

@@ -1,4 +1,4 @@
-# Local Development
+# Local development
 localhost {
     handle_path /api* {
         reverse_proxy api-services:8080
@@ -12,9 +12,9 @@ localhost {
 }
 
 # Production
-{$DOMAIN} {
+espansobuilder.niemergk.com {
     handle_path /api* {
-        reverse_proxy api-services:8080
+        reverse_proxy api-service:8080
     }
 
     handle {
@@ -23,6 +23,6 @@ localhost {
 
     file_server
 
-    # Automatic HTTPS
-    tls {$EMAIL_USER}
+    # Automatic HTTPS via Let's Encrypt
+    tls espanso@niemergk.com
 }

@@ -20,7 +20,7 @@ transporter.verify()
 app.use(cors());
 app.use(express.json());
 
-app.post('/api/triggers/approval', async (req, res) => {
+app.post('/triggers/approval', async (req, res) => {
     
     try {
         const { triggerText, replaceText, multiline } = req.body;
@@ -43,7 +43,7 @@ app.post('/api/triggers/approval', async (req, res) => {
     }
 });
 
-app.get('/api/triggers/all', async (req, res) => {
+app.get('/triggers/all', async (req, res) => {
     try {
         const triggers = await Trigger.find();
         res.json(triggers);
@@ -52,7 +52,7 @@ app.get('/api/triggers/all', async (req, res) => {
     }
 });
 
-app.get('/api/triggers/most-recent', async (req, res) => {
+app.get('/triggers/most-recent', async (req, res) => {
     try {
         const recentTriggers = await Trigger.find()
             .sort({ createdAt: -1}) // newest first
@@ -65,7 +65,7 @@ app.get('/api/triggers/most-recent', async (req, res) => {
     }
 });
 
-app.get('/api/triggers/approval/:id', async (req, res) => {
+app.get('/triggers/approval/:id', async (req, res) => {
     try {
         const { id } = req.params; // extract /:id
         const foundTrigger = await Trigger.findById(id);
@@ -82,7 +82,7 @@ app.get('/api/triggers/approval/:id', async (req, res) => {
     }
 });
 
-app.patch('/api/triggers/approval/:id', async (req, res) => {
+app.patch('/triggers/approval/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { approved } = req.body;
